@@ -26,6 +26,8 @@ class dovecot::mail (
   $mail_fsync              = 'optimized'
 ) {
   include dovecot
+  
+  $version = $::dovecot::version
 
   if ( $mail_nfs_index == 'yes' and $mmap_disable != 'yes' ) {
     fail('mail_nfs_index=yes requires mmap_disable=yes')

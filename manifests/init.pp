@@ -1,13 +1,11 @@
 # dovecot class
 class dovecot(
-  $package_configfiles  = 'keep'
-) {
-
-  $mailpackages = $::osfamily ? {
-    default  => ['dovecot-imapd', 'dovecot-pop3d'],
-    'Debian' => ['dovecot-imapd', 'dovecot-pop3d'],
-    'Redhat' => ['dovecot',]
-  }
+  $package_configfiles  = 'keep',
+  $mailpackages         = $::dovecot::params::mailpackages,
+  $version              = $::dovecot::params::version,
+  $augeas_path          = $::dovecot::params::augeas_path,
+  $augeas_lenses        = $::dovecot::params::augeas_lenses,
+) inherits ::dovecot::params {
 
   ensure_packages([$mailpackages], { 'configfiles' => $package_configfiles })
 
