@@ -127,6 +127,11 @@ Variable: indent
   let comment_c_style =
     comment_generic /[ \t]*\/\/[ \t]*/ "// "
 
+(* View: comment_c_style_or_hash
+    A comment line, C-style or hash *)
+  let comment_c_style_or_hash =
+    comment_generic /[ \t]*((\/\/)|#)[ \t]*/ "// "
+
 (* View: empty_generic
   A generic definition of <empty>
   Map empty lines, including empty comments *)
@@ -140,10 +145,16 @@ Variable: indent
   Map empty lines, including empty comments *)
   let empty = empty_generic empty_generic_re
 
+(* Variable: empty_c_style_re *)
+  let empty_c_style_re = /[ \t]*((\/\/)|(\/\*[ \t]*\*\/))?[ \t]*/
+
 (* View: empty_c_style
   Map empty lines, including C-style empty comment *)
-  let empty_c_style =
-    empty_generic /[ \t]*((\/\/)|(\/\*[ \t]*\*\/))?[ \t]*/
+  let empty_c_style = empty_generic empty_c_style_re
+
+(* View: empty_any
+  Either <empty> or <empty_c_style> *)
+  let empty_any = empty_generic (empty_generic_re | empty_c_style_re)
 
 (* View: empty_generic_dos
   A generic definition of <empty> with dos newlines
@@ -185,4 +196,3 @@ Variable: stdexcl
     (excl "*.bak") .
     (excl "*.old") .
     (excl "#*#")
-
